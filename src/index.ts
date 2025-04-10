@@ -6,52 +6,52 @@ import OAuthProvider from "@cloudflare/workers-oauth-provider";
 
 export class MyMCP extends McpAgent {
 	server = new McpServer({
-		name: "Server1",
+		name: "server1",
 		version: "1.0.0",
 	});
 
 	async init() {
-		// Сложение
+		// Addition
 		this.server.tool(
 			"sum",
 			{
-				a: z.number().describe("Первое число"),
-				b: z.number().describe("Второе число"),
+				a: z.number().describe("The first number"),
+				b: z.number().describe("The second number"),
 			},
 			async ({ a, b }) => ({
 				content: [{ type: "text", text: String(a + b) }],
 			}),
 			{
-				description: "Складывает два числа и возвращает сумму как текст.",
+				description: "Adds two numbers and returns the result as text.",
 			}
 		);
 
-		// Умножение
+		// Multiplication
 		this.server.tool(
 			"multiply",
 			{
-				a: z.number().describe("Первое число"),
-				b: z.number().describe("Второе число"),
+				a: z.number().describe("The first number"),
+				b: z.number().describe("The second number"),
 			},
 			async ({ a, b }) => ({
 				content: [{ type: "text", text: String(a * b) }],
 			}),
 			{
-				description: "Умножает два числа и возвращает результат как текст.",
+				description: "Multiplies two numbers and returns the result as text.",
 			}
 		);
 
-		// Деление
+		// Division
 		this.server.tool(
 			"divide",
 			{
-				a: z.number().describe("Число-делимое"),
-				b: z.number().describe("Число-делитель (не должно быть 0)"),
+				a: z.number().describe("The numerator"),
+				b: z.number().describe("The denominator (must not be 0)"),
 			},
 			async ({ a, b }) => {
 				if (b === 0) {
 					return {
-						content: [{ type: "text", text: "Ошибка: деление на ноль" }],
+						content: [{ type: "text", text: "Error: division by zero" }],
 					};
 				}
 				return {
@@ -59,7 +59,7 @@ export class MyMCP extends McpAgent {
 				};
 			},
 			{
-				description: "Делит первое число на второе и возвращает результат. Деление на ноль не допускается.",
+				description: "Divides the first number by the second. Returns the result as text. Division by zero is not allowed.",
 			}
 		);
 	}
