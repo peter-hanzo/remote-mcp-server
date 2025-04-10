@@ -11,17 +11,55 @@ export class MyMCP extends McpAgent {
 	});
 
 	async init() {
+		// Сложение
 		this.server.tool(
-			"add",
+			"sum",
 			{
-				a: z.number().describe("Первое число для сложения"),
-				b: z.number().describe("Второе число для сложения"),
+				a: z.number().describe("Первое число"),
+				b: z.number().describe("Второе число"),
 			},
 			async ({ a, b }) => ({
 				content: [{ type: "text", text: String(a + b) }],
 			}),
 			{
-				description: "Складывает два числа и возвращает результат как текст.",
+				description: "Складывает два числа и возвращает сумму как текст.",
+			}
+		);
+
+		// Умножение
+		this.server.tool(
+			"multiply",
+			{
+				a: z.number().describe("Первое число"),
+				b: z.number().describe("Второе число"),
+			},
+			async ({ a, b }) => ({
+				content: [{ type: "text", text: String(a * b) }],
+			}),
+			{
+				description: "Умножает два числа и возвращает результат как текст.",
+			}
+		);
+
+		// Деление
+		this.server.tool(
+			"divide",
+			{
+				a: z.number().describe("Число-делимое"),
+				b: z.number().describe("Число-делитель (не должно быть 0)"),
+			},
+			async ({ a, b }) => {
+				if (b === 0) {
+					return {
+						content: [{ type: "text", text: "Ошибка: деление на ноль" }],
+					};
+				}
+				return {
+					content: [{ type: "text", text: String(a / b) }],
+				};
+			},
+			{
+				description: "Делит первое число на второе и возвращает результат. Деление на ноль не допускается.",
 			}
 		);
 	}
