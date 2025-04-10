@@ -6,14 +6,24 @@ import OAuthProvider from "@cloudflare/workers-oauth-provider";
 
 export class MyMCP extends McpAgent {
 	server = new McpServer({
-		name: "Demo",
+		name: "Server1",
 		version: "1.0.0",
 	});
 
 	async init() {
-		this.server.tool("add", { a: z.number(), b: z.number() }, async ({ a, b }) => ({
-			content: [{ type: "text", text: String(a + b) }],
-		}));
+		this.server.tool(
+			"add",
+			{
+				a: z.number().describe("Первое число для сложения"),
+				b: z.number().describe("Второе число для сложения"),
+			},
+			async ({ a, b }) => ({
+				content: [{ type: "text", text: String(a + b) }],
+			}),
+			{
+				description: "Складывает два числа и возвращает результат как текст.",
+			}
+		);
 	}
 }
 
