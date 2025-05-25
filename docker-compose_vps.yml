@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  whatsapp-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: whatsapp-api
+    environment:
+      - MODE=whatsapp-api
+      - API_PORT=${API_PORT}
+      - API_KEY=${API_KEY}
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    restart: unless-stopped
+    networks:
+      whatsapp-network:
+        aliases:
+          - whatsappAPI
+
+  whatsapp-mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: whatsapp-mcp
+    environment:
+      - MODE=mcp
+      - TRANSPORT=${TRANSPORT}
+      - SSE_PORT=${SSE_PORT}
+      - API_BASE_URL=http://whatsappAPI:${API_PORT}/api
+      - API_KEY=${API_KEY}
+    ports:
+      - "${SSE_PORT}:${SSE_PORT}"
+    restart: unless-stopped
+    depends_on:
+      - whatsapp-api
+    networks:
+      - whatsapp-network
+
+networks:
+  whatsapp-network:
+    driver: bridge
